@@ -1,92 +1,194 @@
-# rrsched
+**WARNING:** Do not upload any files in this repository to public websites. If you want to clone this repository, please make sure to keep it private.
 
+# Round Robin CPU Scheduler Simulator - starter code for Assignment 4
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
+To compile all code, type:
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/cpsc457f22/rrsched.git
-git branch -M main
-git push -uf origin main
+$ make
 ```
 
-## Integrate with your tools
+To run the resulting code on file test1.txt with quantum=3 and max. execution sequence length of 20:
+```
+$ ./scheduler 3 20 < test1.txt
+```
 
-- [ ] [Set up project integrations](https://gitlab.com/cpsc457f22/rrsched/-/settings/integrations)
+## IMPORTANT
 
-## Collaborate with your team
+Only modify and submit the `scheduler.cpp` file. Your TAs will
+supply their own versions of the other files (such as main.cpp) to
+compile and test your code.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+## Test files
 
-## Test and Deploy
+The repository includes several test files. Here are correct results for these test files.
 
-Use the built-in continuous integration in GitLab.
+```
+$ ./scheduler 3 20 < slides.txt
+seq = [0,1,2,3,0,4,1,3]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    0 |                    6 |                    0 |                   15 |
+|  1 |                    0 |                    6 |                    3 |                   20 |
+|  2 |                    1 |                    3 |                    6 |                    9 |
+|  3 |                    2 |                    8 |                    9 |                   25 |
+|  4 |                    3 |                    2 |                   15 |                   17 |
++---------------------------+----------------------+----------------------+----------------------+
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+$ ./scheduler 3 20 < test1.txt 
+seq = [-1,0,1,0,2,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    1 |                   10 |                    1 |                   19 |
+|  1 |                    3 |                    5 |                    4 |                   15 |
+|  2 |                    5 |                    3 |                   10 |                   13 |
++---------------------------+----------------------+----------------------+----------------------+
 
-***
+$ ./scheduler 1 20 < test1.txt 
+seq = [-1,0,1,0,1,2,0,1,2,0,1,2,0,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    1 |                   10 |                    1 |                   19 |
+|  1 |                    3 |                    5 |                    4 |                   16 |
+|  2 |                    5 |                    3 |                    7 |                   14 |
++---------------------------+----------------------+----------------------+----------------------+
 
-# Editing this README
+$ ./scheduler 1 5 < test1.txt 
+seq = [-1,0,1,0,1]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    1 |                   10 |                    1 |                   19 |
+|  1 |                    3 |                    5 |                    4 |                   16 |
+|  2 |                    5 |                    3 |                    7 |                   14 |
++---------------------------+----------------------+----------------------+----------------------+
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+$ ./scheduler 100 20 < test2.txt 
+seq = []
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
++---------------------------+----------------------+----------------------+----------------------+
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+$ ./scheduler 300000000000 40 < test3.txt 
+seq = [-1,0,1,0,2,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |         100000000000 |        1000000000000 |         100000000000 |        1900000000000 |
+|  1 |         300000000000 |         500000000000 |         400000000000 |        1500000000000 |
+|  2 |         500000000000 |         300000000000 |        1000000000000 |        1300000000000 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Name
-Choose a self-explaining name for your project.
+$ ./scheduler 30000000000 1000 < test3.txt 
+seq = [-1,0,1,0,1,0,1,0,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,2,1,0,1,0,1,0,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |         100000000000 |        1000000000000 |         100000000000 |        1900000000000 |
+|  1 |         300000000000 |         500000000000 |         310000000000 |        1590000000000 |
+|  2 |         500000000000 |         300000000000 |         550000000000 |        1390000000000 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+$ ./scheduler 1 40 < test3.txt 
+seq = [-1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |         100000000000 |        1000000000000 |         100000000000 |        1900000000000 |
+|  1 |         300000000000 |         500000000000 |         300000000001 |        1600000000000 |
+|  2 |         500000000000 |         300000000000 |         500000000002 |        1400000000000 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+$ ./scheduler 1 40 < test4.txt 
+seq = [-1,0,1,0,1,0,1,0,1,0,1,2,0,1,0,-1,3]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    5 |                   10 |                    5 |                   22 |
+|  1 |                    6 |                    6 |                    7 |                   19 |
+|  2 |                   14 |                    1 |                   16 |                   17 |
+|  3 |                   50 |                   17 |                   50 |                   67 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+$ ./scheduler 3 40 < test4.txt 
+seq = [-1,0,1,0,1,0,2,0,-1,3]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                    5 |                   10 |                    5 |                   22 |
+|  1 |                    6 |                    6 |                    8 |                   17 |
+|  2 |                   14 |                    1 |                   20 |                   21 |
+|  3 |                   50 |                   17 |                   50 |                   67 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+$ ./scheduler 157 140 < test5.txt 
+seq = [-1,0,1,2,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,0,1,2,3,4,3,4,-1,5]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                   10 |                 1000 |                   10 |                 4464 |
+|  1 |                   30 |                 1000 |                  167 |                 4522 |
+|  2 |                  100 |                 1000 |                  324 |                 4580 |
+|  3 |                  500 |                 1000 |                  952 |                 4952 |
+|  4 |                  501 |                 1000 |                 1109 |                 5010 |
+|  5 |              5000000 |                    1 |              5000000 |              5000001 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+$ ./scheduler 1 200 < test6.txt
+seq = [-1,0,1,-1,2,3,-1,4,5,4,5,4,5,4,5,4,5,4,5,4,5,4,-1,6]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                   20 |                    1 |                   20 |                   21 |
+|  1 |                   20 |                   10 |                   21 |                   31 |
+|  2 |                 1000 |                    1 |                 1000 |                 1001 |
+|  3 |                 1000 |                   10 |                 1001 |                 1011 |
+|  4 |                 2000 |                 2000 |                 2000 |                 4007 |
+|  5 |                 2005 |                    7 |                 2006 |                 2019 |
+|  6 |                 6000 |                    1 |                 6000 |                 6001 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+$ ./scheduler 5 200 < test6.txt
+seq = [-1,0,1,-1,2,3,-1,4,5,4,5,4,-1,6]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                   20 |                    1 |                   20 |                   21 |
+|  1 |                   20 |                   10 |                   21 |                   31 |
+|  2 |                 1000 |                    1 |                 1000 |                 1001 |
+|  3 |                 1000 |                   10 |                 1001 |                 1011 |
+|  4 |                 2000 |                 2000 |                 2000 |                 4007 |
+|  5 |                 2005 |                    7 |                 2010 |                 2022 |
+|  6 |                 6000 |                    1 |                 6000 |                 6001 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+$ ./scheduler 5555 200 < test6.txt
+seq = [-1,0,1,-1,2,3,-1,4,5,-1,6]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |                   20 |                    1 |                   20 |                   21 |
+|  1 |                   20 |                   10 |                   21 |                   31 |
+|  2 |                 1000 |                    1 |                 1000 |                 1001 |
+|  3 |                 1000 |                   10 |                 1001 |                 1011 |
+|  4 |                 2000 |                 2000 |                 2000 |                 4000 |
+|  5 |                 2005 |                    7 |                 4000 |                 4007 |
+|  6 |                 6000 |                    1 |                 6000 |                 6001 |
++---------------------------+----------------------+----------------------+----------------------+
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+$ ./scheduler 1 50 < test7.txt
+seq = [-1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0]
++---------------------------+----------------------+----------------------+----------------------+
+| Id |              Arrival |                Burst |                Start |               Finish |
++---------------------------+----------------------+----------------------+----------------------+
+|  0 |          10000000000 |         100000000000 |          10000000000 |         160000000150 |
+|  1 |          11000000000 |          10000000010 |          11000000001 |          67300000057 |
+|  2 |          12000000000 |          10000000020 |          12000000002 |          69800000108 |
+|  3 |          13000000000 |          10000000030 |          13000000003 |          71133333482 |
+|  4 |          14000000000 |          10000000040 |          14000000004 |          71883333513 |
+|  5 |          15000000000 |          10000000050 |          15000000005 |          72283333534 |
++---------------------------+----------------------+----------------------+----------------------+
+```
