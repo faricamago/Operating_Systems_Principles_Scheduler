@@ -99,14 +99,15 @@ static int cppmain(const VS & args)
     if (args.size() != 3)
         return usage(args[0]);
 
+    int64_t quantum, max_seq_len;
     try {
-        int64_t quantum = std::stoll(args[1]);
-        int64_t max_seq_len = std::stoll(args[2]);
-        return run_sched(quantum, max_seq_len);
+        quantum = std::stoll(args[1]);
+        max_seq_len = std::stoll(args[2]);
     } catch (...) {
         std::cout << "Could not parse command line arguments.\n";
         return usage(args[0]);
     }
+    return run_sched(quantum, max_seq_len);
 }
 
 int main(int argc, char ** argv)
